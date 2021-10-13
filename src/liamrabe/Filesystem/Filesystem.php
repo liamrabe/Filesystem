@@ -29,7 +29,8 @@ class Filesystem {
 
 	protected string $mode = 'read';
 
-	public function __construct(string $path) {
+	public function __construct(string $path, int $mode = self::MODE_READ) {
+		$this->setMode($mode);
 		$this->path = $path;
 	}
 
@@ -75,6 +76,52 @@ class Filesystem {
 	}
 
 	/**
+	 * Save the current file
+	 *
+	 * @param string $flags
+	 * @return bool
+	 */
+	public function save(string $flags): bool {
+		$file = fopen($this->path, $flags);
+		fwrite($file, $this->content);
+
+		return fclose($file);
+	}
+
+	/**
+	 * Moves file from one folder to another
+	 *
+	 * @param string $new_file_path
+	 * @return Filesystem|bool
+	 */
+	public function move(string $new_file_path): Filesystem|bool {
+		$content = $this->getContent();
+		$copy_res = $this->save($new_file_path, $content, 'x+');
+
+		if ($copy_res) {
+			$this->delete($this->path);
+
+			return new self($new_file_path);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Deletes a file from the filesystem.
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	public function delete(string $path = ''): bool {
+		if ($path === '') {
+			$path = $this->path;
+		}
+
+		return unlink($path);
+	}
+
+	/**
 	 * @param int $mode
 	 * @return Filesystem
 	 * @throws InvalidFileModeException
@@ -111,6 +158,26 @@ class Filesystem {
 		}
 
 		return new self($path);
+	}
+
+	/**
+	 * Generate filesystem class on formatted filepath
+	 *
+	 * @param $_
+	 * @return Filesystem
+	 * @throws FileNotFoundException
+	 */
+	public static function create($_): Filesystem {
+		$args = func_get_args();
+		$format = array_shift($args);
+
+		$path = str_replace('\\', '/', vsprintf($format, $args));
+
+		if (file_exists($path)) {
+			return self::path($path);
+		}
+
+		return new self($path, self::MODE_WRITE);
 	}
 
 }
