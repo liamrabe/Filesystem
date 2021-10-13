@@ -8,6 +8,7 @@ Run `composer require liamrabe/filesystem` to add it to your project
 # Requirements
 
 * PHP >=8.0
+* SimpleXML & JSON
 * Composer 2
 
 # Usage
@@ -87,3 +88,12 @@ echo Filesystem::path('/%s/%s', $dirname, $filename)
 
 // Returns: '/path/to/file'
 ```
+
+## Issues
+
+If you've found an issue or want to request a feature, create an issue or make a pull request
+and I'll check it out when I can.
+
+## License
+
+MIT
