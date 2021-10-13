@@ -1,0 +1,7 @@
+{
+	"name": "liamrabe/filesystem",
+	"description": "Easy-to-use filesystem-class",
+	"require": {
+		"php": ">=8.0"
+	}
+}

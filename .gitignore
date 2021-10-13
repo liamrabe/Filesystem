@@ -1,0 +1,6 @@
+# Composer ignore
+vendor/
+composer.lock
+
+# JetBrains PHPStorm ignore
+.idea/
