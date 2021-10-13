@@ -39,7 +39,7 @@ class Filesystem {
 	 */
 	public function setContent(string $content): Filesystem {
 		$this->content = $content;
-		$this->setMode('write');
+		$this->setMode(self::MODE_WRITE);
 
 		return $this;
 	}
@@ -75,15 +75,16 @@ class Filesystem {
 	}
 
 	/**
-	 * @param string $mode
+	 * @param int $mode
 	 * @return Filesystem
 	 * @throws InvalidFileModeException
 	 */
-	public function setMode(string $mode): Filesystem {
+	protected function setMode(int $mode): Filesystem {
 		if (!in_array($mode, self::MODES)) {
-			throw new InvalidFileModeException("You can't save file in read mode");
+			throw new InvalidFileModeException("Invalid filesystem mode, '%s' is not supported", $mode);
 		}
 
+		$this->mode = self::MODES[$mode];
 		return $this;
 	}
 
