@@ -1,8 +1,12 @@
 <?php
 namespace liamrabe\Filesystem;
 
-use Exception\FileNotFoundException;
 use Exception\InvalidFileModeException;
+use Exception\FileNotFoundException;
+use Exception;
+
+use SimpleXMLElement;
+use stdClass;
 
 class Filesystem {
 
@@ -27,7 +31,7 @@ class Filesystem {
 	protected string $path;
 	protected string $content;
 
-	protected string $mode = 'read';
+	protected string $mode;
 
 	public function __construct(string $path, int $mode = self::MODE_READ) {
 		$this->setMode($mode);
@@ -56,6 +60,32 @@ class Filesystem {
 		return $this->content;
 	}
 
+	/**
+	 * Parses content to JSON
+	 *
+	 * @return stdClass|bool
+	 * @throws Exception
+	 */
+	public function getContentAsJSON(): stdClass|bool {
+		$json = json_decode($this->getContent());
+
+		if (!$json) {
+			throw new Exception('Failed parsing JSON');
+		}
+
+		return $json;
+	}
+
+	/**
+	 * Parses content to XML
+	 *
+	 * @return SimpleXMLElement
+	 * @throws Exception
+	 */
+	public function getContentAsXML(): SimpleXMLElement {
+		return new SimpleXMLElement($this->getContent());
+	}
+
 	protected function readFile(): string {
 		return file_get_contents($this->path);
 	}
@@ -68,11 +98,7 @@ class Filesystem {
 	}
 
 	public function getMetadata(): FileInformation {
-		if (empty($this->content)) {
-			$this->getContent();
-		}
-
-		return new FileInformation($this->path, $this->content);
+		return new FileInformation($this->path, $this->getContent());
 	}
 
 	/**
