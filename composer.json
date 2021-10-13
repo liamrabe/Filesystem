@@ -1,7 +1,22 @@
 {
 	"name": "liamrabe/filesystem",
 	"description": "Easy-to-use filesystem-class",
+	"keywords": ["filesystem"],
+	"license": "MIT",
+	"type": "library",
 	"require": {
-		"php": ">=8.0"
-	}
+		"php": ">=8.0",
+		"ext-pdo": "*",
+		"ext-simplexml": "*"
+	},
+	"autoload": {
+		"psr-0": { "liamrabe": "src/" }
+	},
+	"authors": [
+		{
+			"name": "Liam Rabe",
+			"email": "liam@liamrabe.se",
+			"homepage": "https://github.com/liamrabe"
+		}
+	]
 }
