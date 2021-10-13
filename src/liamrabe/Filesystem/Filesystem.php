@@ -1,6 +1,8 @@
 <?php
+namespace liamrabe\Filesystem;
 
-use Exception\FilesystemException;
+use Exception\FileNotFoundException;
+use Exception\InvalidFileModeException;
 
 class Filesystem {
 
@@ -46,7 +48,15 @@ class Filesystem {
 	 * @return string|null
 	 */
 	public function getContent(): ?string {
-		return $this->content ?? null;
+		if (empty($this->content)) {
+			$this->content = $this->readFile();
+		}
+
+		return $this->content;
+	}
+
+	protected function readFile(): string {
+		return file_get_contents($this->path);
 	}
 
 	/**
@@ -56,14 +66,22 @@ class Filesystem {
 		return file_exists($this->path);
 	}
 
+	public function getMetadata(): FileInformation {
+		if (empty($this->content)) {
+			$this->getContent();
+		}
+
+		return new FileInformation($this->path, $this->content);
+	}
+
 	/**
 	 * @param string $mode
 	 * @return Filesystem
-	 * @throws FilesystemException
+	 * @throws InvalidFileModeException
 	 */
 	public function setMode(string $mode): Filesystem {
 		if (!in_array($mode, self::MODES)) {
-			throw new FilesystemException("You can't save file in read mode");
+			throw new InvalidFileModeException("You can't save file in read mode");
 		}
 
 		return $this;
@@ -76,12 +94,21 @@ class Filesystem {
 	 *
 	 * @param $_
 	 * @return Filesystem
+	 * @throws FileNotFoundException
 	 */
 	public static function path($_): Filesystem {
 		$args = func_get_args();
 		$format = array_shift($args);
 
 		$path = str_replace('\\', '/', vsprintf($format, $args));
+
+		if (!file_exists($path)) {
+			throw new FileNotFoundException(sprintf(
+				"Couldn't find file %s",
+				basename($path)
+			));
+		}
+
 		return new self($path);
 	}
 
