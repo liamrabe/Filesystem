@@ -2,8 +2,10 @@
 	"name": "liamrabe/filesystem",
 	"description": "Easy-to-use filesystem-class",
 	"keywords": ["filesystem"],
+	"version": "1.0.0",
 	"license": "MIT",
 	"type": "library",
+	"homepage": "https://github.com/liamrabe",
 	"require": {
 		"php": ">=8.0",
 		"ext-pdo": "*",
