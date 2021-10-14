@@ -1,5 +1,5 @@
 <?php
-namespace Exception;
+namespace liamrabe\Filesystem\Exception;
 
 use RuntimeException;
 
