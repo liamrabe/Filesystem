@@ -104,12 +104,22 @@ class Filesystem {
 	/**
 	 * Save the current file
 	 *
+	 * @param string $path
+	 * @param string $content
 	 * @param string $flags
 	 * @return bool
 	 */
-	public function save(string $flags): bool {
-		$file = fopen($this->path, $flags);
-		fwrite($file, $this->content);
+	public function save(string $path = '', string $content = '', string $flags = 'wr'): bool {
+		if ($path === '') {
+			$path = $this->path;
+		}
+
+		if ($content === '') {
+			$content = $this->getContent();
+		}
+
+		$file = fopen($path, $flags);
+		fwrite($file, $content);
 
 		return fclose($file);
 	}
@@ -122,7 +132,7 @@ class Filesystem {
 	 */
 	public function move(string $new_file_path): Filesystem|bool {
 		$content = $this->getContent();
-		$copy_res = $this->save($new_file_path, $content, 'x+');
+		$copy_res = $this->save($new_file_path, $content, 'wr');
 
 		if ($copy_res) {
 			$this->delete($this->path);
