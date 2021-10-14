@@ -153,8 +153,8 @@ class Filesystem {
 	 * @throws InvalidFileModeException
 	 */
 	protected function setMode(int $mode): Filesystem {
-		if (!in_array($mode, self::MODES)) {
-			throw new InvalidFileModeException("Invalid filesystem mode, '%s' is not supported", $mode);
+		if (!isset(self::MODES[$mode])) {
+			throw new InvalidFileModeException(sprintf("Invalid filesystem mode, '%s' is not supported", $mode));
 		}
 
 		$this->mode = self::MODES[$mode];
