@@ -6,6 +6,7 @@
 	"license": "MIT",
 	"type": "library",
 	"homepage": "https://github.com/liamrabe",
+	"minimum-stability": "stable",
 	"require": {
 		"php": ">=8.0",
 		"ext-pdo": "*",
