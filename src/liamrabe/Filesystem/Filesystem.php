@@ -1,8 +1,8 @@
 <?php
 namespace liamrabe\Filesystem;
 
-use Exception\InvalidFileModeException;
-use Exception\FileNotFoundException;
+use liamrabe\Filesystem\Exception\InvalidFileModeException;
+use liamrabe\Filesystem\Exception\FileNotFoundException;
 use Exception;
 
 use SimpleXMLElement;
